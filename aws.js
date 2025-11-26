@@ -289,6 +289,7 @@ function socketSend(message) {
 
 function checkCode() {
     let code = localStorage.getItem('room_code')
+    checkID()
     if (!code) {
         return
     }
@@ -296,18 +297,20 @@ function checkCode() {
 
     if (confirm(`Return to room ${code}?`)) {
         access_code = code
-        socketSend({ action: 'start' });
+        socketSend({ action: 'reconnect' });
     } else {
         localStorage.clear()
-        access_code = ''
+        access_code = null
     }
 }
 
 function checkID() {
     user_id = localStorage.getItem('user_id')
     if (!user_id) {
-        user_id = ''
+        user_id = null
+        return
     }
+    user_id=JSON.parse(user_id)
 }
 function pingPong() {
     socketSend({ action: 'ping' })
@@ -332,7 +335,7 @@ function socketConnect() {
     socket = new WebSocket('wss://qrku7dmlia.execute-api.us-east-2.amazonaws.com/production/');
 
     socket.onopen = function (event) {
-        myVar = setTimedInterval(pingPong, 1000 * 90, 3000000);
+        myVar = setTimedInterval(pingPong, 1000 * 60, 3000000);
         changeAllHeaders('Connected');
         checkCode();
         reconnections = 0;
@@ -429,6 +432,7 @@ function parse_message(message) {
                     break;
                 case 'confirm_code':
                     access_code = message.code;
+                    alert(JSON.stringify(access_code))
                     game_state = game_states.need_name
                     inputField.focus()
                     saveList();
@@ -439,6 +443,7 @@ function parse_message(message) {
                     let notification = "Got it, you're {message['name']}.".replace("{message['name']}", message.name)
                     addtoDash(notification)
                     user_id = message.ID
+                    alert(JSON.stringify(user_id))
                     localStorage.setItem("user_id", JSON.stringify(user_id));
                     changeAllHeaders('Get Ready to Draft')
                     game_state = game_states.drafting

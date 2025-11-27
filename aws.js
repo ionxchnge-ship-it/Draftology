@@ -211,7 +211,6 @@ function sendMessage() {
     }
 }
 function showPopup(options) {
-    alert(1)
     const form = document.getElementById("radio_container");
     const form_button = document.getElementById("form_button");
     options.forEach((opt, index) => {
@@ -219,7 +218,7 @@ function showPopup(options) {
         radio.setAttribute('label', `opt${index}`)
         radio.setAttribute('name', index)
         radio.setAttribute('value', opt)
-        form.insertBefore(radio, form_button)
+        form.insertBefore(radio,form_button)
     });
     disableBackgroundInteraction(true)
     document.getElementById("popup").style.display = "block";
@@ -241,10 +240,10 @@ function removeSiblings(currentElement) {
 function submitOption() {
     const selected = document.querySelector('input[type="radio"]:checked');
     if (selected) {
-        socketSend({ action: 'sudden_death', pick: selected.value })
+        socketSend({ action: 'sudden_death', pick: selected.value });
         alert("You selected: " + selected.value);
-        removeSiblings(document.getElementById("form_button"))
-        disableBackgroundInteraction(false)
+        removeSiblings(document.getElementById("form_button"));
+        disableBackgroundInteraction(false);
         document.getElementById("popup").style.display = "none";
 
     } else {
@@ -309,6 +308,7 @@ function vote(vote) {
         last_vote = vote;
     }
 };
+
 function switchPage(page_id) {
     for (let page of pages) {
         page.style.display = 'none';
@@ -415,6 +415,7 @@ function parse_message(message) {
                     localStorage.removeItem('listItems');
                     break;
                 case 'draft':
+                    alert(message.topic)
                     changeAllHeaders("Drafting Topic".replace("Topic", message.topic));
                     game_state = game_states.drafting
                     populateDraftPage(message.answers)
@@ -470,7 +471,6 @@ function parse_message(message) {
                     break;
                 case 'confirm_code':
                     access_code = message.code;
-                    alert(JSON.stringify(access_code))
                     game_state = game_states.need_name
                     inputField.focus()
                     saveList();
@@ -481,7 +481,6 @@ function parse_message(message) {
                     let notification = "Got it, you're {message['name']}.".replace("{message['name']}", message.name)
                     addtoDash(notification)
                     user_id = message.ID
-                    alert(JSON.stringify(user_id))
                     localStorage.setItem("user_id", JSON.stringify(user_id));
                     changeAllHeaders('Get Ready to Draft')
                     game_state = game_states.drafting
@@ -521,4 +520,3 @@ function parse_message(message) {
 }
 socketConnect();
 window.onload = loadList();
-// parse_message({action:'notify_player',subaction:'sudden_death',picks:['1','2','3']})

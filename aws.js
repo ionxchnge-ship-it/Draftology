@@ -49,7 +49,28 @@ class QueueItem extends HTMLElement {
 
 }
 
+class SuddenDeath extends HTMLElement {
+    constructor() {
+        // Always call super first in constructor
+        super();
+    }
+    connectedCallback() {
+        const label = this.getAttribute("label")
+        const name = this.getAttribute("name")
+        const value = this.getAttribute("value")
+        this.style.display = 'flex'
+        this.style.alignItems = 'center'
+        this.style.justifyContent = 'center'
+        this.innerHTML = `
+        <input type="radio" id="${label}" name="option" value="${value}"/>
+        <label for="${label}">${value.slice(0, 15)}</label>
+        `;
+    };
 
+}
+
+
+customElements.define("sudden-death", SuddenDeath);
 customElements.define("transition-button", TransitionButton);
 customElements.define("queue-item", QueueItem);
 function getIndex(element) {
@@ -139,7 +160,7 @@ function makeDraggable(item) {
         if (draggedItem) {
             e.preventDefault();
             let touch = e.touches[0];
-            let targets=document.elementsFromPoint(touch.clientX, touch.clientY);
+            let targets = document.elementsFromPoint(touch.clientX, touch.clientY);
             let dropTarget = null
             let draggedIndex = getIndex(draggedItem);
             let targetIndex = getIndex(dropTarget);
@@ -190,25 +211,42 @@ function sendMessage() {
     }
 }
 function showPopup(options) {
-    const form = document.getElementById("optionsForm");
-    form.innerHTML = '<p>Send to Final Battle:</p>'; // reset
+    alert(1)
+    const form = document.getElementById("radio_container");
+    const form_button = document.getElementById("form_button");
     options.forEach((opt, index) => {
-        const id = `opt${index}`;
-        form.innerHTML += `
-                <label><input type="radio" name="option" value="${opt}" id="${id}"> ${opt.slice(0, 15)}</label><br>`;
+        let radio = document.createElement('sudden-death')
+        radio.setAttribute('label', `opt${index}`)
+        radio.setAttribute('name', index)
+        radio.setAttribute('value', opt)
+        form.insertBefore(radio, form_button)
     });
     disableBackgroundInteraction(true)
     document.getElementById("popup").style.display = "block";
-    // document.getElementById("overlay").style.display = "block";
+}
+// Source - https://stackoverflow.com/a
+// Posted by Александр Шевченко
+// Retrieved 2025-11-27, License - CC BY-SA 4.0
+/**
+ * Removes all sibling elements after specified
+ * @param {HTMLElement} currentElement
+ * @private
+ */
+function removeSiblings(currentElement) {
+    while (currentElement.previousElementSibling) {
+        currentElement.previousElementSibling.remove();
+    }
 }
 
 function submitOption() {
-    const selected = document.querySelector('input[name="option"]:checked');
+    const selected = document.querySelector('input[type="radio"]:checked');
     if (selected) {
         socketSend({ action: 'sudden_death', pick: selected.value })
         alert("You selected: " + selected.value);
-        document.getElementById("popup").style.display = "none";
+        removeSiblings(document.getElementById("form_button"))
         disableBackgroundInteraction(false)
+        document.getElementById("popup").style.display = "none";
+
     } else {
         alert("Please select an option.");
     }
@@ -310,7 +348,7 @@ function checkID() {
         user_id = null
         return
     }
-    user_id=JSON.parse(user_id)
+    user_id = JSON.parse(user_id)
 }
 function pingPong() {
     socketSend({ action: 'ping' })
@@ -413,7 +451,7 @@ function parse_message(message) {
 
         case 'stop':
             clearInterval(myVar)
-            reconnections=10
+            reconnections = 10
             socket.terminate()
             window.close();
             break;
@@ -483,3 +521,4 @@ function parse_message(message) {
 }
 socketConnect();
 window.onload = loadList();
+// parse_message({action:'notify_player',subaction:'sudden_death',picks:['1','2','3']})

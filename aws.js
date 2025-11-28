@@ -218,7 +218,7 @@ function showPopup(options) {
         radio.setAttribute('label', `opt${index}`)
         radio.setAttribute('name', index)
         radio.setAttribute('value', opt)
-        form.insertBefore(radio,form_button)
+        form.insertBefore(radio, form_button)
     });
     disableBackgroundInteraction(true)
     document.getElementById("popup").style.display = "block";
@@ -322,7 +322,13 @@ function socketSend(message) {
     message['code'] = access_code
     message['ID'] = user_id
     console.log(message)
-    socket.send(JSON.stringify(message))
+    if (socket.readyState === WebSocket.OPEN) {
+        try {
+            socket.send(JSON.stringify(message))
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
 function checkCode() {
@@ -415,7 +421,6 @@ function parse_message(message) {
                     localStorage.removeItem('listItems');
                     break;
                 case 'draft':
-                    alert(message.topic)
                     changeAllHeaders("Drafting Topic".replace("Topic", message.topic));
                     game_state = game_states.drafting
                     populateDraftPage(message.answers)
@@ -453,8 +458,9 @@ function parse_message(message) {
         case 'stop':
             clearInterval(myVar)
             reconnections = 10
-            socket.terminate()
-            window.close();
+            socket.
+                alert('Thanks for Playing')
+            // window.close();
             break;
 
         case 'new_pick':
@@ -464,6 +470,10 @@ function parse_message(message) {
         case 'notify_player':
             switch (message.subaction) {
                 case "wrong_code":
+                    access_code=null;
+                    user_id=null;
+                    alert(message.warning)
+                    break;
                 case "your_turn":
                 case 'snitch':
                 case 'vote':
@@ -510,7 +520,8 @@ function parse_message(message) {
                     } else {
                         socketSend({ action: 'restart', answer: false });
                         alert('bye bye');
-
+                        reconnections = 10
+                        socket.close()
                     };
                     break;
             }
@@ -520,3 +531,4 @@ function parse_message(message) {
 }
 socketConnect();
 window.onload = loadList();
+parse_message({ action: 'notify_player', 'subaction': 'restart' })

@@ -531,4 +531,3 @@ function parse_message(message) {
 }
 socketConnect();
 window.onload = loadList();
-parse_message({ action: 'notify_player', 'subaction': 'restart' })

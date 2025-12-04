@@ -295,16 +295,15 @@
 
     <form id="popup" style="display: none;">
         <fieldset id="radio_container" style="justify-content: space-evenly; display: flex; flex-direction: column; align-items: center;">
-            <legend>Select Your Best Pick:</legend>
+            <legend id="options_legend">Select Your Best Pick:</legend>
                 <button id="form_button" type="button" onclick="submitOption()">Submit</button>
         </fieldset>
         
     </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <!-- <script src="../static/aws.js"></script> -->
     <!-- <script src="aws.js"></script> -->
-    <script src="{{ url_for('static', filename='aws.js') }}"></script>
-    <script src="../static/aws.js"></script>
-    <script src="aws.js"></script>
+     <script src="../static/local.js"></script>
 
 </body>
 

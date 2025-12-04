@@ -11,6 +11,8 @@ let game_state = game_states.need_code;
 let access_code = ''
 let user_id = ''
 let drag_time
+let form_submittion_states = { names: 'names', death_picks: 'death_picks' };
+let form_type=form_submittion_states.death_picks
 
 class TransitionButton extends HTMLElement {
     connectedCallback() {
@@ -69,7 +71,6 @@ class SuddenDeath extends HTMLElement {
 
 }
 
-
 customElements.define("sudden-death", SuddenDeath);
 customElements.define("transition-button", TransitionButton);
 customElements.define("queue-item", QueueItem);
@@ -92,13 +93,16 @@ function saveList() {
     });
     localStorage.setItem("listItems", JSON.stringify(listItems));
 }
+
 function changeButtonColor(color, button_id) {
     let button_ = document.getElementById(button_id).style.backgroundColor = color;
 }
+
 function resetVoteButton() {
     changeButtonColor(document.documentElement.style.getPropertyValue('--bg'), 'left')
     changeButtonColor(document.documentElement.style.getPropertyValue('--bg'), 'right')
 }
+
 function loadList() {
     let storedList = JSON.parse(localStorage.getItem("listItems"));
     if (storedList) {
@@ -223,6 +227,7 @@ function showPopup(options) {
     disableBackgroundInteraction(true)
     document.getElementById("popup").style.display = "block";
 }
+
 // Source - https://stackoverflow.com/a
 // Posted by Александр Шевченко
 // Retrieved 2025-11-27, License - CC BY-SA 4.0
@@ -240,12 +245,16 @@ function removeSiblings(currentElement) {
 function submitOption() {
     const selected = document.querySelector('input[type="radio"]:checked');
     if (selected) {
-        socketSend({ action: 'sudden_death', pick: selected.value });
+        if (form_type == form_submittion_states.death_picks) {
+            socketSend({ action: 'sudden_death', pick: selected.value });
+            
+        } else if (form_type == form_submittion_states.names) {
+            socketSend({action : 'reconnect', selected_name: selected.value})
+        }
         alert("You selected: " + selected.value);
         removeSiblings(document.getElementById("form_button"));
         disableBackgroundInteraction(false);
         document.getElementById("popup").style.display = "none";
-
     } else {
         alert("Please select an option.");
     }
@@ -338,13 +347,14 @@ function checkCode() {
         return
     }
     code = JSON.parse(code)
-
-    if (confirm(`Return to room ${code}?`)) {
-        access_code = code
-        socketSend({ action: 'reconnect' });
-    } else {
-        localStorage.clear()
-        access_code = null
+    if (user_id) {
+        if (confirm(`Return to room ${code}?`)) {
+            access_code = code
+            socketSend({ action: 'reconnect' });
+        } else {
+            localStorage.clear()
+            access_code = null
+        }
     }
 }
 
@@ -399,7 +409,7 @@ function socketConnect() {
             socketConnect();
             reconnections += 1;
         }
-        changeAllHeaders('Disconnected');
+        changeAllHeaders('Disconnected. Refresh.');
     };
 }
 
@@ -458,20 +468,34 @@ function parse_message(message) {
         case 'stop':
             clearInterval(myVar)
             reconnections = 10
-            socket.
-                alert('Thanks for Playing')
+            socket.close()
+            alert('Thanks for Playing')
             // window.close();
             break;
 
         case 'new_pick':
             addtoDraftPage(`${message.name} drafted ${message.pick}`);
             break;
+        case "reconnect":
+            switch (message.subaction) {
+                case 'failure':
+                    alert('We couldn\'t reconnect you');
+                    break;
+                case 'present_names':
+                    form_type=form_submittion_states.names
+                    document.getElementById('options_legend').textContent='Confirm Your Old Name:'
+                    showPopup(message.names)
+                    break;
+                case 'ask_name':
+                    socketSend({ action: 'reconnect', old_name: prompt('What was your name?') });
+                    break;
+            }
 
         case 'notify_player':
             switch (message.subaction) {
                 case "wrong_code":
-                    access_code=null;
-                    user_id=null;
+                    access_code = null;
+                    user_id = null;
                     alert(message.warning)
                     break;
                 case "your_turn":
@@ -511,6 +535,8 @@ function parse_message(message) {
                     socketSend({ action: 'host', subaction: 'topic_select', topic: userInput });
                     break;
                 case 'sudden_death':
+                    form_type=form_submittion_states.death_picks
+                    document.getElementById('options_legend').textContent='Select Your Best Pick:'
                     showPopup(message.picks);
                     break;
                 case 'restart':
@@ -531,3 +557,4 @@ function parse_message(message) {
 }
 socketConnect();
 window.onload = loadList();
+parse_message({'action':'reconnect',subaction:'present_names',names:['asdf','asdfsd']})

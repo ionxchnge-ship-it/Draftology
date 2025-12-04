@@ -557,4 +557,4 @@ function parse_message(message) {
 }
 socketConnect();
 window.onload = loadList();
-parse_message({'action':'reconnect',subaction:'present_names',names:['asdf','asdfsd']})
+// parse_message({'action':'reconnect',subaction:'present_names',names:['asdf','asdfsd']})

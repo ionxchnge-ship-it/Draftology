@@ -1,4 +1,3 @@
-
 const inputField = document.getElementById("messageInput");
 const main = document.getElementById("main-page");
 const instruction = document.getElementById("instructionsPage");

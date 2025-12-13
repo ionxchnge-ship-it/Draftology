@@ -7,7 +7,7 @@ const pages = [main, instruction, queue, draft_list];
 let last_vote = '';
 let host_code = '2222';
 let game_states = { need_code: 'need_code', need_name: 'need_name', drafting: 'drafting', vote: 'voting' };
-let headers_text={need_code:'Enter Room Code',need_name:'Enter Your Name',refresh:'Try to Refresh Page.',drafting:'Get Ready to Draft'}
+let headers_text = { need_code: 'Enter Room Code', need_name: 'Enter Your Name', refresh: 'Try to Refresh Page.', drafting: 'Get Ready to Draft' }
 let game_state = game_states.need_code;
 let access_code = ''
 let user_id = ''
@@ -89,7 +89,6 @@ inputField.addEventListener("keydown", function (event) {
         inputField.blur();
     }
 });
-
 
 
 function saveList() {
@@ -203,6 +202,10 @@ function checkGameState(needed_state) {
 }
 function sendMessage() {
     let message = inputField.value;
+    if (socket.readyState === WebSocket.CLOSED) {
+        window.location.reload();
+        return
+    }
     if (message) {
         if (message === host_code) {
             socketSend({ action: 'host', subaction: 'make_host' });
@@ -294,6 +297,7 @@ function addtoDraftPage(text) {
     outputDiv.innerHTML += `<p><b>"${text}"</b></p>`;
 }
 function populateDraftPage(answers) {
+    document.getElementById('draft_output').innerHTML = '';
     for (let [pick, name] of Object.entries(answers)) {
         addtoDraftPage(`${name} drafted ${pick}`);
     }
@@ -316,6 +320,10 @@ function changeAllHeaders(new_header) {
     changeHeader(new_header, 'header2');
 }
 function vote(vote) {
+    if (socket.readyState === WebSocket.CLOSED) {
+        window.location.reload();
+        return
+    }
     if (checkGameState(game_states.vote)) {
         socketSend({ action: 'vote', vote: vote });
         resetVoteButton();
@@ -360,7 +368,7 @@ function checkCode() {
         } else {
             localStorage.clear()
             access_code = null
-            user_id=null
+            user_id = null
         }
     }
 }
@@ -392,6 +400,7 @@ async function socketConnect(use_local_ws = false) {
     if (use_local_ws) {
         url = await get_ws_url()
     }
+    console.log(url)
     socket = new WebSocket(url);
 
     socket.onopen = function (event) {
@@ -401,7 +410,7 @@ async function socketConnect(use_local_ws = false) {
         reconnections = 0;
         if (game_state == game_states.need_code) {
             changeAllHeaders(headers_text.need_code);
-        } 
+        }
     };
     socket.onmessage = function (event) {
         if (event.data) {
@@ -503,7 +512,6 @@ function parse_message(message) {
                 case 'success':
                     access_code = message.code;
                     localStorage.setItem("room_code", JSON.stringify(access_code));
-                    let notification = "Got it, you're {message['name']}.".replace("{message['name']}", message.name)
                     addtoDash(notification)
                     user_id = message.ID
                     localStorage.setItem("user_id", JSON.stringify(user_id));

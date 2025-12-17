@@ -101,6 +101,11 @@ function saveList() {
 
 function changeButtonColor(color, button_id) {
     document.getElementById(button_id).style.backgroundColor = color;
+    if (color=='green') {
+        setTimeout(() => {
+       resetVoteButton();
+    }, 4000);
+    }
 }
 
 function resetVoteButton() {
@@ -489,8 +494,8 @@ function parse_message(message) {
             clearInterval(myVar)
             reconnections = 10
             socket.close()
+            localStorage.clear()
             alert('Thanks for Playing')
-            // window.close();
             break;
 
         case 'new_pick':
@@ -568,6 +573,7 @@ function parse_message(message) {
                     break;
                 case 'restart':
                     document.getElementById('draft_output').innerHTML = '';
+                    document.getElementById('output').innerHTML= '';
                     if (confirm('Wanna play again?')) {
                         socketSend({ action: 'restart', answer: true });
                     } else {

@@ -123,7 +123,8 @@
             height: 60px;
             border-radius: 15px;
             border: none;
-            width: 60px;
+            min-width: 60px;
+            width: fit-content;
             font-size: .5rem;
             box-shadow: -3px 3px 0px rgb(0, 0, 0);
         }
@@ -217,9 +218,6 @@
             <transition-button label="Queue" target="queuePage"></transition-button>
             <transition-button label="Draft List" target="draftPage"></transition-button>
             <transition-button label="Rules" target="instructionsPage"></transition-button>
-            <!-- <button class="transition-button" onclick="switchPage(queue)">Queue</button> -->
-            <!-- <button class="transition-button" onclick="switchPage(draft_list)">Draft List</button> -->
-            <!-- <button class="transition-button" onclick="switchPage(instruction)">Rules</button> -->
         </div>
         <h1>Draftology</h1>
         <h2 id="header">Disconnected</h2>
@@ -251,20 +249,38 @@
             <transition-button label="Draft List" target="draftPage"></transition-button>
             <transition-button label="Main Page" target="main-page"></transition-button>
         </div>
+        <transition-button label="Host Details" target="main-page"></transition-button>
         <h1>Instructions</h1>
+        
         <p style="font-size: 30px;">Here you will learn the study of the draft</p>
         <ol>
             <li>Pick a topic (ex: Best Actors, Musicians, literally anything)</li>
             <li>Enter your Room Code on your play screen</li>
             <li>Enter your name when prompted.</li>
             <li>When you're notified its your turn to draft. Enter your draft pick. (One at a time)</li>
-            <li>When you press the top left Queue button, you can enter your ideas to be drafted later.</li>
-            <li>When its time to vote press left or right button on the main screen.</li>
+            <li>Press the top left Queue button to enter your ideas to be drafted later.</li>
+            <li>Vote for the best team by pressing the Left or Right button on the main screen.</li>
             <li>Thanks for playing.</li>
         </ol>
 
     </div>
 
+    <div id="HostInstruction" class="container" style="display: none;">
+        <transition-button label="Rules" target="instructionsPage"></transition-button>
+        <h1>Instructions</h1>
+        
+        <p style="font-size: 30px;">Here you will learn the study of the draft</p>
+        <ol>
+            <li>Once you enter your name, you can sign in as host at anytime in the game.</li>
+            <li>You'll get access to a suite of buttons that'll make things easier.</li>
+            <li>The Start button naturally starts the game, and if no topic is selected you can enter it remotely.</li>
+            <li>It also can pause the game once it has started, and it can restart the game once someone is declared the champ.</li>
+            <li>The Left and Right button will let you select those players as the winner and override the voting process.</li>
+            <li>The Next button will let you skip players while they're drafting, or skip both voting timer.</li>
+            <li>The Red Zoom button zooms the camera out and Green zooms in.</li>
+        </ol>
+
+    </div>
     <div id="queuePage" class="container" style="display: none;">
         <div class="button-row">
             <transition-button label="Main Page" target="main-page"></transition-button>
@@ -294,15 +310,15 @@
     </div>
 
     <form id="popup" style="display: none;">
-        <fieldset id="radio_container" style="justify-content: space-evenly; display: flex; flex-direction: column; align-items: center;">
+        <fieldset id="radio_container"
+            style="justify-content: space-evenly; display: flex; flex-direction: column; align-items: center;">
             <legend id="options_legend">Select Your Best Pick:</legend>
-                <button id="form_button" type="button" onclick="submitOption()">Submit</button>
+            <button id="form_button" type="button" onclick="submitOption()">Submit</button>
         </fieldset>
-        
+
     </form>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script src="../static/shared_func.js"></script>
-    <!-- <script src="./static/shared_func.js"></script> -->
     <script>
         // Source - https://stackoverflow.com/a
         // Posted by Barnstokkr, modified by community. See post 'Timeline' for change history
@@ -311,6 +327,7 @@
         socketConnect();
         window.onload = loadList();
     </script>
+
 
 </body>
 

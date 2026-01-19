@@ -80,6 +80,7 @@ class SuddenDeath extends HTMLElement {
 customElements.define("sudden-death", SuddenDeath);
 customElements.define("transition-button", TransitionButton);
 customElements.define("queue-item", QueueItem);
+
 function getIndex(element) {
     return [...element.parentNode.children].indexOf(element);
 }
@@ -202,7 +203,9 @@ function vibratePhone() {
         navigator.vibrate(500);
     }
 };
-
+function checkGameState(needed_state) {
+    return game_state == needed_state
+};
 function sendMessage() {
     let message = inputField.value;
     if (socket.readyState === WebSocket.CLOSED) {

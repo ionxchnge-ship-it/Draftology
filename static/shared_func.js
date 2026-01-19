@@ -16,7 +16,7 @@ let form_submittion_states = { names: 'names', death_picks: 'death_picks' };
 let form_type = form_submittion_states.death_picks
 let reconnections = 0;
 let myVar
-let url = 'wss://qrku7dmlia.execute-api.us-east-2.amazonaws.com/production/'
+let url = 'wss:/qrku7dmlia.execute-api.us-east-2.amazonaws.com/production/'
 let socket
 let draggedItem = null;
 
@@ -202,9 +202,7 @@ function vibratePhone() {
         navigator.vibrate(500);
     }
 };
-function checkGameState(needed_state) {
-    return game_state == needed_state
-}
+
 function sendMessage() {
     let message = inputField.value;
     if (socket.readyState === WebSocket.CLOSED) {
@@ -250,10 +248,11 @@ function showPopup(options) {
  * @param {HTMLElement} currentElement
  * @private
  */
-function removeSiblings(currentElement) {
-    while (currentElement.previousElementSibling) {
-        currentElement.previousElementSibling.remove();
-    }
+function clearOptions() {
+    radio_container=document.getElementById("radio_container")
+    radio_container.querySelectorAll("sudden-death").forEach((elem) => {
+        elem.remove();
+    });
 }
 
 function submitOption() {
@@ -266,7 +265,7 @@ function submitOption() {
             socketSend({ action: 'reconnect', selected_name: selected.value })
         }
         alert("You selected: " + selected.value);
-        removeSiblings(document.getElementById("form_button"));
+        clearOptions();
         disableBackgroundInteraction(false);
         document.getElementById("popup").style.display = "none";
     } else {
@@ -588,3 +587,5 @@ function parse_message(message) {
 
 }
 // parse_message({'action':'reconnect',subaction:'present_names',names:['asdf','asdfsd']})
+
+parse_message({"action": "notify_player", "subaction": "sudden_death", "picks": ["jhj ", "j j", " jkk"]})

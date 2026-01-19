@@ -588,4 +588,4 @@ function parse_message(message) {
 }
 // parse_message({'action':'reconnect',subaction:'present_names',names:['asdf','asdfsd']})
 
-parse_message({"action": "notify_player", "subaction": "sudden_death", "picks": ["jhj ", "j j", " jkk"]})
+// parse_message({"action": "notify_player", "subaction": "sudden_death", "picks": ["jhj ", "j j", " jkk"]})

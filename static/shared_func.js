@@ -407,7 +407,7 @@ async function socketConnect(use_local_ws = false) {
     if (use_local_ws) {
         url = await get_ws_url()
     }
-    console.log(url)
+    
     socket = new WebSocket(url);
 
     socket.onopen = function (event) {

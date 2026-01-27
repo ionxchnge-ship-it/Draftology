@@ -5,210 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Draftology</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Modak&display=swap');
-
-        :root {
-            --text: rgb(65, 32, 250);
-            --bg: rgb(175, 195, 255);
-            font-size: 50px;
-
-        }
-
-        * {
-            font-family: 'Modak', 'Cooper', 'Bauhaus 93', 'Bugaki';
-            font-weight: 300;
-            margin: 0%;
-            /* box-sizing: border-box; */
-        }
-
-        #popup {
-            top: 0;
-            left: 0;
-            position: fixed;
-            color: var(--text);
-            background-color: var(--bg);
-            font-size: 40px;
-            width: 100vw;
-            height: 100vh;
-            display: none;
-            background-color: rgb(175, 195, 255);
-            z-index: 1000;
-        }
-
-        #popup button {
-            width: fit-content;
-        }
-
-
-        .queue {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-items: center;
-            list-style-type: none;
-            padding-top: 0%;
-            padding-left: 10px;
-            padding-right: 10px;
-        }
-
-        .queue li {
-            width: 90%;
-            padding: 10px;
-            list-style-type: none;
-            border-bottom: 2px solid var(--text);
-        }
-
-        .queueItem {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        li span {
-            flex: 5;
-            font-size: 40px;
-        }
-
-        li button {
-            height: 30px;
-            /* width: 40px; */
-            width: fit-content;
-            font-size: 25px;
-            flex: 1;
-        }
-
-        h1 {
-            color: var(--text);
-            font-size: 1rem;
-        }
-
-        h2 {
-            font-size: .75rem;
-            color: var(--text);
-        }
-
-        h3 {
-            font-size: .75rem;
-            color: var(--text);
-        }
-
-        .container {
-            color: var(--text);
-            /* padding: 20px; */
-            align-items: center;
-            justify-items: center;
-            /* align-self: center; */
-            /* justify-self: center; */
-            /* width: 80%; */
-        }
-
-        /* .container input {
-            width: 70%;
-            height: 75px;
-            font-size: 25px;
-            border-radius: 15px;
-        } */
-
-        .container li {
-            font-size: 30px;
-        }
-
-        button {
-            text-align: center;
-            background-color: var(--text);
-            color: var(--bg);
-            height: 60px;
-            border-radius: 15px;
-            border: none;
-            min-width: 60px;
-            width: fit-content;
-            font-size: .5rem;
-            box-shadow: -3px 3px 0px rgb(0, 0, 0);
-        }
-
-        .input-row {
-            width: 95%;
-            max-width: 95%;
-            font-size: .8rem;
-            height: 75px;
-            font-size: 25px;
-            border-radius: 15px;
-            align-items: center;
-            display: flex;
-            gap: 10px;
-            /* justify-content: center; */
-            flex-direction: row;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        input[type="radio"] {
-            margin-right: 5px;
-        }
-
-        fieldset {
-            height: 85%;
-        }
-
-        input:checked {
-            border: 6px solid black;
-        }
-
-        .input-row input {
-            min-width: 0;
-            height: 75px;
-            flex: 3.5;
-            font-size: .65rem;
-            border-radius: 15px;
-        }
-
-        .transition-button {
-            height: fit-content;
-            border-radius: 15px;
-            width: fit-content;
-            font-size: 0.4rem;
-            text-align: center;
-        }
-
-        .transition-button:active,
-        button:active {
-            opacity: 0.9;
-            background-color: yellow;
-        }
-
-        .button-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 60px);
-            grid-template-rows: repeat(2, 60px);
-            gap: 10px;
-            justify-content: space-evenly;
-            align-items: center;
-            position: fixed;
-            bottom: 5%;
-            right: 5%;
-            left: 5%;
-        }
-
-        .button-grid button {
-            width: 75px;
-            justify-content: center;
-        }
-
-        .button-row {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-evenly;
-            align-self: center;
-            gap: 10px;
-            width: 90%;
-        }
-
-        .button-row button {
-            height: fit-content;
-        }
-    </style>
+    <link rel="stylesheet" href="../static/Draftology.css">
 </head>
 
 <body style="background-color: var(--bg); text-align: center;">
@@ -248,9 +45,13 @@
             <transition-button label="Draft List" target="draftPage"></transition-button>
             <transition-button label="Main Page" target="main-page"></transition-button>
         </div>
-        <transition-button label="Host Details" target="main-page"></transition-button>
+        <div class="button-row">
+            <transition-button style="margin-top: 30px; margin-left: auto; margin-right: auto;" label="Host Details"
+                target="HostInstruction"></transition-button>
+        </div>
+
         <h1>Instructions</h1>
-        
+
         <p style="font-size: 30px;">Here you will learn the study of the draft</p>
         <ol>
             <li>Pick a topic (ex: Best Actors, Musicians, literally anything)</li>
@@ -267,14 +68,16 @@
     <div id="HostInstruction" class="container" style="display: none;">
         <transition-button label="Rules" target="instructionsPage"></transition-button>
         <h1>Instructions</h1>
-        
+
         <p style="font-size: 30px;">Here you will learn the study of the draft</p>
         <ol>
             <li>Once you enter your name, you can sign in as host at anytime in the game.</li>
             <li>You'll get access to a suite of buttons that'll make things easier.</li>
             <li>The Start button naturally starts the game, and if no topic is selected you can enter it remotely.</li>
-            <li>It also can pause the game once it has started, and it can restart the game once someone is declared the champ.</li>
-            <li>The Left and Right button will let you select those players as the winner and override the voting process.</li>
+            <li>It also can pause the game once it has started, and it can restart the game once someone is declared the
+                champ.</li>
+            <li>The Left and Right button will let you select those players as the winner and override the voting
+                process.</li>
             <li>The Next button will let you skip players while they're drafting, or skip both voting timer.</li>
             <li>The Red Zoom button zooms the camera out and Green zooms in.</li>
         </ol>

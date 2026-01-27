@@ -3,7 +3,8 @@ const main = document.getElementById("main-page");
 const instruction = document.getElementById("instructionsPage");
 const queue = document.getElementById("queuePage");
 const draft_list = document.getElementById("draftPage");
-const pages = [main, instruction, queue, draft_list];
+const host_rules = document.getElementById("HostInstruction");
+const pages = [main, instruction, queue, draft_list,host_rules];
 let last_vote = '';
 let host_code = '2222';
 let game_states = { need_code: 'need_code', need_name: 'need_name', drafting: 'drafting', vote: 'voting' };
@@ -407,7 +408,7 @@ async function socketConnect(use_local_ws = false) {
     if (use_local_ws) {
         url = await get_ws_url()
     }
-    
+    console.log(url)
     socket = new WebSocket(url);
 
     socket.onopen = function (event) {

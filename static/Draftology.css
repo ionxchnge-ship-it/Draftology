@@ -40,7 +40,7 @@
 }
 
 
-.popup {
+#popup {
     top: 0;
     left: 0;
     position: fixed;
@@ -49,18 +49,17 @@
     font-size: 40px;
     width: 100vw;
     height: 100vh;
-    display: none;
-    /* background-color: rgb(175, 195, 255); */
+    display: block;
     z-index: 1000;
 }
 
-.popup.show {
+#popup.show {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.popup button {
+#popup button {
     width: fit-content;
 }
 
